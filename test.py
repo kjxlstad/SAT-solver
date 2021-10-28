@@ -1,6 +1,8 @@
 from sys import stdin
 from typing import Set, List
 
+from functools import reduce
+
 Clauses = List[Set[int]]
 
 clauses = [
@@ -27,7 +29,18 @@ def resolve(clauses: Clauses):
             return false
     
 
+def pure_literal_elimination(clauses):
+    f = reduce(lambda x, y: x | y, clauses)
+    pure_literals = *filter(lambda l: -l not in f, f),
+    
+    return [i > 0 for i in pure_literals]
+
+
+
 def unit_propogation():
+    ...
+
+def cut():
     ...
 
 def complement(clause_1, clause_2):
@@ -47,5 +60,3 @@ r = {1, 2, 3}
 
 print(complement(t, r))
 
-def prove():
-    ...
