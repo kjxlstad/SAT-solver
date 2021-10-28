@@ -4,8 +4,6 @@ from typing import List, Set, Tuple
 from functools import reduce
 from random import choice
 
-# TODO: create pdf
-
 
 """
 SAT solver
