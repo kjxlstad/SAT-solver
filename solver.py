@@ -29,7 +29,10 @@ def bc_propogation(formulae: Formulae, literal: int) -> Formulae:
 
 
 def pure_literal_elimination(formulae: Formulae) -> Tuple[Formulae, Set[int]]:
+    # Fetch all literals in formulae
     literals = reduce(lambda x, y: x | y, formulae)
+
+    # Filter out the literals without a complement
     pure_literals = set(filter(lambda l: -l not in literals, literals))
 
     for pure_literal in pure_literals:
