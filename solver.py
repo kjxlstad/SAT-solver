@@ -5,6 +5,11 @@ from functools import reduce
 from random import choice
 
 
+# TODO: implement most common cutting
+# TODO: write readme-like pdf
+# TODO: "Where the literals 1, 2, 3 ... n represents the propositional variables p_1, p_2, p_3 ... p_n"
+
+
 # Shorthand type for formulae
 Formulae = List[Set[int]]
 
@@ -16,9 +21,9 @@ SAT solver
 
 def bc_propogation(formulae: Formulae, literal: int) -> Formulae:
     # Remove any clause containing the given literal
-    formulae = list(filter(lambda clause: literal not in clause, formulae))
+    formulae = filter(lambda clause: literal not in clause, formulae)
 
-    # Remove any instances of -literal
+    # Remove any instances of the negated literal
     formulae = [clause - {-literal} for clause in formulae]
 
     # If the above yields an empty clause, we know the formulae to be unsatisfiable
@@ -26,19 +31,6 @@ def bc_propogation(formulae: Formulae, literal: int) -> Formulae:
         return None
 
     return formulae
-
-
-def pure_literal_elimination(formulae: Formulae) -> Tuple[Formulae, Set[int]]:
-    # Fetch all literals in formulae
-    literals = reduce(lambda x, y: x | y, formulae)
-
-    # Filter out the literals without a complement
-    pure_literals = set(filter(lambda l: -l not in literals, literals))
-
-    for pure_literal in pure_literals:
-        formulae = bc_propogation(formulae, pure_literal)
-
-    return formulae, pure_literals
 
 
 def unit_propogation(formulae: Formulae) -> Tuple[Formulae, Set[int]]:
@@ -59,6 +51,19 @@ def unit_propogation(formulae: Formulae) -> Tuple[Formulae, Set[int]]:
     return formulae, assignments
 
 
+def pure_literal_elimination(formulae: Formulae) -> Tuple[Formulae, Set[int]]:
+    # Fetch all literals in formulae
+    literals = reduce(lambda x, y: x | y, formulae)
+
+    # Filter out the literals without a complement
+    pure_literals = set(filter(lambda l: -l not in literals, literals))
+
+    for pure_literal in pure_literals:
+        formulae = bc_propogation(formulae, pure_literal)
+
+    return formulae, pure_literals
+
+
 def dpll(formulae: Formulae, assignments: Set[int] = set()) -> Set[int]:
     formulae, pure_assignments = pure_literal_elimination(formulae)
     formulae, unit_assignments = unit_propogation(formulae)
@@ -68,7 +73,7 @@ def dpll(formulae: Formulae, assignments: Set[int] = set()) -> Set[int]:
     if formulae is None:
         return set()
 
-    # If the formulae is empty, it is satisfied, return satisfying interpretation.
+    # If the formulae is empty, it is satisfied, return interpretation.
     if not formulae:
         return assignments
 
