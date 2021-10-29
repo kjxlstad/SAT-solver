@@ -5,13 +5,13 @@ from functools import reduce
 from random import choice
 
 
+# Shorthand type for formulae
+Formulae = List[Set[int]]
+
+
 """
 SAT solver
 """
-
-
-# Shorthand type for formulae
-Formulae = List[Set[int]]
 
 
 def bc_propogation(formulae: Formulae, literal: int) -> Formulae:
@@ -82,13 +82,14 @@ def dpll(formulae: Formulae, assignments: Set[int] = set()) -> Set[int]:
 
 
 """
-Input parsing
+Input parsing and entry point
 """
 
 
 def parse_arguments() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
-    parser.add_argument("-f", "--file", type=str, help="Path to file containing clauses.")
+    parser.add_argument("-f", "--file", type=str)
+    parser.add_argument("-v", "--verbose", action="store_true")
     return parser.parse_args()
 
 
@@ -111,11 +112,6 @@ def parse_formulae(text: str) -> Formulae:
     return [set(map(int, line.split(" "))) for line in text.split("\n")[:-1]]
 
 
-"""
-Entry point
-"""
-
-
 if __name__ == "__main__":
     args = parse_arguments()
 
@@ -124,12 +120,5 @@ if __name__ == "__main__":
 
     solution = dpll(formulae)
 
-    if solution:
-        # Pretty-format satisfying interpretation
-        interpretation = {abs(i): i > 0 for i in solution}
-        pretty_interpretation = ",  ".join(
-            f"p_{key} := {val}" for key, val in sorted(interpretation.items())
-        )
-        print(f"Satisfiable with interpretation: {pretty_interpretation}")
-    else:
-        print("Unsatisfiable")
+    interpretation = ", ".join(sorted([f"{abs(i)} := {i > 0}" for i in solution]))
+    print((solution and f"Satisfiable with: {interpretation}") or "Unsatisfiable")
