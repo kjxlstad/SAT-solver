@@ -20,13 +20,13 @@ SAT solver
 
 
 def bc_propogation(formulae: Formulae, literal: int) -> Formulae:
-    # Remove any clause containing the given literal
-    formulae = filter(lambda clause: literal not in clause, formulae)
+    # Remove clauses containing the given literal
+    # Remove instances of the negated literal in the remaining clauses
+    formulae = [
+        clause - {-literal} for clause in formulae if literal not in clause
+    ]
 
-    # Remove any instances of the negated literal
-    formulae = [clause - {-literal} for clause in formulae]
-
-    # If the above yields an empty clause, we know the formulae to be unsatisfiable
+    # If the above yields an empty clause, it is unsatisfiable
     if not all(formulae):
         return None
 
@@ -94,7 +94,6 @@ Input parsing and entry point
 def parse_arguments() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("-f", "--file", type=str)
-    parser.add_argument("-v", "--verbose", action="store_true")
     return parser.parse_args()
 
 
@@ -125,5 +124,6 @@ if __name__ == "__main__":
 
     solution = dpll(formulae)
 
+    # Pretty print satisfiability and satisfying interpretation
     interpretation = ", ".join(sorted([f"{abs(i)} := {i > 0}" for i in solution]))
     print((solution and f"Satisfiable with: {interpretation}") or "Unsatisfiable")
