@@ -135,5 +135,5 @@ if __name__ == "__main__":
     solution = dpll(formulae)
 
     # Pretty print satisfiability and satisfying interpretation
-    interpretation = ", ".join(sorted([f"{abs(i)} := {i > 0}" for i in solution]))
+    interpretation = dict(sorted({abs(i) : i > 0 for i in solution}.items()))
     print((solution and f"Satisfiable with: {interpretation}") or "Unsatisfiable")
