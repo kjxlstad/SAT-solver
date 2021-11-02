@@ -15,16 +15,16 @@ SAT solver
 
 def most_frequent_literal(formulae: Formulae) -> int:
     # Collect the unique literals
-    unique_literals = list(reduce(lambda a, b: a | b, formulae))
+    literals = list(reduce(lambda a, b: a | b, formulae))
 
     # Count occurences of each unique literal
     count = [
         sum([literal in clause for clause in formulae])
-        for literal in unique_literals
+        for literal in literals
     ]
 
     # Return the first literal with the highest frequency
-    return unique_literals[count.index(max(count))]
+    return literals[count.index(max(count))]
 
 
 def bc_propogation(formulae: Formulae, literal: int) -> Formulae:
