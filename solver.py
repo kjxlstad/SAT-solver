@@ -2,12 +2,6 @@ import argparse
 from sys import stdin
 from typing import List, Set, Tuple
 from functools import reduce
-from random import choice
-
-
-# TODO: implement most common cutting
-# TODO: write readme-like pdf
-# TODO: "Where the literals 1, 2, 3 ... n represents the propositional variables p_1, p_2, p_3 ... p_n"
 
 
 # Shorthand type for formulae
@@ -17,6 +11,21 @@ Formulae = List[Set[int]]
 """
 SAT solver
 """
+
+
+def most_frequent_literal(formulae: Formulae) -> int:
+    # Collect the unique literals
+    unique_literals = list(reduce(lambda a, b: a | b, formulae))
+
+    # Count occurences of each unique literal
+    count = [
+        sum(
+            [literal in clause for clause in formulae]
+        ) for literal in unique_literals
+    ]
+
+    # Return the first literal with the highest frequency
+    return unique_literals[count.index(max(count))]
 
 
 def bc_propogation(formulae: Formulae, literal: int) -> Formulae:
@@ -53,7 +62,7 @@ def unit_propogation(formulae: Formulae) -> Tuple[Formulae, Set[int]]:
 
 def pure_literal_elimination(formulae: Formulae) -> Tuple[Formulae, Set[int]]:
     # Fetch all literals in formulae
-    literals = reduce(lambda x, y: x | y, formulae)
+    literals = reduce(lambda a, b: a | b, formulae)
 
     # Filter out the literals without a complement
     pure_literals = set(filter(lambda l: -l not in literals, literals))
@@ -78,7 +87,7 @@ def dpll(formulae: Formulae, assignments: Set[int] = set()) -> Set[int]:
         return assignments
 
     # Pick variable for cutting and branch
-    cut = choice(list(reduce(lambda x, y: x | y, formulae)))
+    cut = most_frequent_literal(formulae)
 
     return (
         dpll(bc_propogation(formulae, cut), assignments | {cut}) or 
