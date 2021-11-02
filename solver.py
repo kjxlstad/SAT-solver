@@ -121,6 +121,8 @@ def file_input(path: str) -> str:
 
 
 def parse_formulae(text: str) -> Formulae:
+    # Splits text on newline into list of clauses
+    # Splits lines on space into set of literals
     return [set(map(int, line.split(" "))) for line in text.split("\n")[:-1]]
 
 
