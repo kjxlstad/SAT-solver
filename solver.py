@@ -19,9 +19,8 @@ def most_frequent_literal(formulae: Formulae) -> int:
 
     # Count occurences of each unique literal
     count = [
-        sum(
-            [literal in clause for clause in formulae]
-        ) for literal in unique_literals
+        sum([literal in clause for clause in formulae])
+        for literal in unique_literals
     ]
 
     # Return the first literal with the highest frequency
