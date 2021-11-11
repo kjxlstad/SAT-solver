@@ -13,9 +13,14 @@ SAT solver
 """
 
 
+def unique_literals(formulae: Formulae) -> List[int]:
+    # If formulae contains literals, return unique_literals, else reuturn empty
+    return (formulae and list(reduce(lambda a, b: a | b, formulae))) or []
+
+
 def most_frequent_literal(formulae: Formulae) -> int:
     # Collect the unique literals
-    literals = list(reduce(lambda a, b: a | b, formulae))
+    literals = unique_literals(formulae)
 
     # Count occurences of each unique literal
     count = [
@@ -61,7 +66,7 @@ def unit_propogation(formulae: Formulae) -> Tuple[Formulae, Set[int]]:
 
 def pure_literal_elimination(formulae: Formulae) -> Tuple[Formulae, Set[int]]:
     # Fetch all literals in formulae
-    literals = reduce(lambda a, b: a | b, formulae)
+    literals = unique_literals(formulae)
 
     # Filter out the literals without a complement
     pure_literals = set(filter(lambda l: -l not in literals, literals))
