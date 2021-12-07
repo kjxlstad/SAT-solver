@@ -9,10 +9,12 @@ python solver.py -f problem.in
 ```
 
 ### Input and Output
-Input is taken in clausal form and is interpreted in the following manner. Each line in the input represents a clause, and each clause is built form space-delimited integers. The integers $1, \, 2, \, 3, \ldots \, n$ represents the propositional variables $p_1, \, p_2, \, p_3, \, \ldots \, p_n$, and the negative integers $-1, \, -2, \, -3, \, \ldots \, -n$ represents the negated propositional variables $\neg p_1, \, \neg p_2, \, \neg p_3 \, \ldots \, \neg p_n$
+Input is taken in clausal form and is interpreted in the following manner. Each line in the input represents a clause, and each clause is built form space-delimited integers. The integers ![](http://www.sciweavers.org/upload/Tex2Img_1638888865/eqn.png) represents the propositional variables ![](http://www.sciweavers.org/upload/Tex2Img_1638888883/eqn.png), and the negative integers ![](http://www.sciweavers.org/upload/Tex2Img_1638888900/eqn.png) represents the negated propositional variables ![](http://www.sciweavers.org/upload/Tex2Img_1638888919/eqn.png).
 
 For example, the set of clauses:
-$$\left\{\left\{p_1\right\}, \, \left\{\neg p_1, \, p_3\right\}, \, \left\{\neg p_1, \, p_2, \, \neg p_3\right\}\right\}$$ 
+
+![](http://www.sciweavers.org/upload/Tex2Img_1638888649/eqn.png)
+
 is given as input to the program as:
 ```
 1
